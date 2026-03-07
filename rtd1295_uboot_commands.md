@@ -1,0 +1,4 @@
+# messed up command to initialize the terminal
+setend ; setenv serverip 192.168.1.3 ; setenv ipaddr 192.168.1.2 ; setenv gatewayip 192.168.1.1 ; tftp $kernel_loadaddr UImage_rtd1295 ; tftp $fdt_loadaddr rtd1295-zidoo-x9.dtb ; usb start ; mmc rescan ; setenv bootargs "audit=0 console=ttyS0,115200 root=/dev/sda2 rootfstype=f2fs rootflags=compress_algorithm=zstd rootdelay=2 earlyprintk=serial earlycon=uart8250,mmio32,0x98007800" ; bootm $kernel_loadaddr - $fdt_loadaddr
+# f2fs no compression
+setenv serverip 192.168.1.3 ; setenv ipaddr 192.168.1.2 ; setenv gatewayip 192.168.1.1 ; tftp $kernel_loadaddr UImage_rtd1295 ; tftp $fdt_loadaddr rtd1295-zidoo-x9.dtb ; usb start ; mmc rescan ; setenv bootargs "audit=0 console=ttyS0,115200 root=/dev/sda1 rootfstype=f2fs rootdelay=2 earlyprintk=serial" ; bootm $kernel_loadaddr - $fdt_loadaddr
