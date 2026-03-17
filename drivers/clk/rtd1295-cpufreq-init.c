@@ -36,6 +36,14 @@
 /* Monitor thread */
 static struct task_struct *monitor_thread;
 static bool monitor_running = true;
+static bool disable_monitor = false;
+
+static int __init rtd1295_disable_setup(char *str)
+{
+	disable_monitor = true;
+	return 1;
+}
+__setup("rtd1295.disable", rtd1295_disable_setup);
 
 /* CPU-intensive benchmark - calculate primes for 2 seconds */
 static unsigned long cpu_benchmark(void)
@@ -189,6 +197,11 @@ static int __init rtd1295_cpufreq_init(void)
 	void __iomem *crt_base;
 	u32 val;
 	int retry = 2000000;
+
+	if (disable_monitor) {
+		pr_info("RTD1295: Driver disabled via kernel parameter\n");
+		return 0;
+	}
 
 	pr_info("RTD1295: Setting CPU frequency to 1400 MHz\n");
 

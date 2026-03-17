@@ -615,6 +615,16 @@ config HW_RANDOM_ROCKCHIP
 
 	  If unsure, say Y.
 
+config HW_RANDOM_RTD1295
+	bool "Realtek RTD1295 Random Number Generator support"
+	depends on ARCH_REALTEK || COMPILE_TEST
+	default y if ARCH_REALTEK
+	help
+	  This driver provides kernel-side support for the Random Number
+	  Generator hardware found on Realtek RTD1295 SoCs.
+
+	  If unsure, say Y.
+
 endif # HW_RANDOM
 
 config UML_RANDOM

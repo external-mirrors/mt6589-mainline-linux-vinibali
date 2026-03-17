@@ -812,6 +812,7 @@ static void __cold _credit_init_bits(size_t bits)
 
 static bool trust_cpu __initdata = true;
 static bool trust_bootloader __initdata = true;
+static bool force_init __initdata = true;
 static int __init parse_trust_cpu(char *arg)
 {
 	return kstrtobool(arg, &trust_cpu);
@@ -822,6 +823,12 @@ static int __init parse_trust_bootloader(char *arg)
 }
 early_param("random.trust_cpu", parse_trust_cpu);
 early_param("random.trust_bootloader", parse_trust_bootloader);
+
+static int __init parse_force_init(char *arg)
+{
+	return kstrtobool(arg, &force_init);
+}
+early_param("random.force_init", parse_force_init);
 
 static int random_pm_notification(struct notifier_block *nb, unsigned long action, void *data)
 {
@@ -903,6 +910,12 @@ void __init random_init(void)
 	_mix_pool_bytes(&now, sizeof(now));
 	_mix_pool_bytes(&entropy, sizeof(entropy));
 	add_latent_entropy();
+
+	/* Force initialization if requested */
+	if (force_init && crng_init < CRNG_READY) {
+		pr_notice("random: forcing CRNG initialization\n");
+		crng_init = CRNG_READY;
+	}
 
 	/*
 	 * If we were initialized by the cpu or bootloader before workqueues
